@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@media print {
+	body {
+		margin: 0 !important;
+	}
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mantine-AppShell-navbar {
+  background-color: #0B192C !important;
+}
+
+.ck-powered-by {
+  display: none !important;
+}
+
+.ck-sticky-panel__content_sticky {
+  top: 65px !important;
+}
+
+.ck.ck-editor__main {
+  padding-bottom: 40px;
+}
+
+.ck-upload-progress {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.ck-upload-progress-bar {
+  background-color: #4caf50;
+}
+
+.ck.ck-editor__editable .image .ck-progress-bar, .ck.ck-editor__editable .image-inline .ck-progress-bar {
+  background-color: #4caf50 !important;
+  opacity: 0.9 !important;
+  height: 6px !important;
+  border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+  .ck-sticky-panel__content_sticky {
+    position: fixed !important;
+    top: 68px !important;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
