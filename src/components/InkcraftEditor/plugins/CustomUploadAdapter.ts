@@ -1,5 +1,4 @@
 import { FileLoader } from "@ckeditor/ckeditor5-upload/src/filerepository";
-import { FileApiRepository } from "@/features/files/domain/repositories/FileApiRepository";
 import { notifications } from "@mantine/notifications";
 
 class CustomUploadAdapter {
@@ -17,20 +16,21 @@ class CustomUploadAdapter {
       this.controller = new AbortController();
       try {
         const file: any = await this.loader.file;
-        const response = await new FileApiRepository().uploadPostImage(
-          file,
-          this.postId,
-          this.controller.signal,
-          (progressEvent: ProgressEvent) => {
-            if (progressEvent.lengthComputable) {
-              this.loader.uploadTotal = progressEvent.total;
-              this.loader.uploaded = progressEvent.loaded;
-            }
-          }
-        );
+        // const response = await new FileApiRepository().uploadPostImage(
+        //   file,
+        //   this.postId,
+        //   this.controller.signal,
+        //   (progressEvent: ProgressEvent) => {
+        //     if (progressEvent.lengthComputable) {
+        //       this.loader.uploadTotal = progressEvent.total;
+        //       this.loader.uploaded = progressEvent.loaded;
+        //     }
+        //   }
+        // );
 
         resolve({
-          default: response.result,
+          // default: response.result,
+          default: "https://via.placeholder.com/150",
         });
       } catch (error: any) {
         notifications.show({

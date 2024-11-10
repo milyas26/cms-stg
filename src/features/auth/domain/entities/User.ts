@@ -1,5 +1,3 @@
-import { Badge } from "./Badge";
-
 export class User {
   constructor(
     public fullName: string,
@@ -18,7 +16,6 @@ export class User {
     public totalPostView: number,
     public totalFollowers: number,
     public totalFollowing: number,
-    public badges: Badge[],
     public role: string,
     public isMonetizeProgramEnrolled: boolean,
     public isMonetized: boolean,

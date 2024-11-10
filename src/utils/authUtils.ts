@@ -2,17 +2,6 @@ import { AES, enc } from "crypto-js";
 const accessTokenKey: any = process.env.NEXT_PUBLIC_LS_ACCESS_TOKEN_KEY;
 const refreshTokenKey: any = process.env.NEXT_PUBLIC_LS_REFRESH_ACCESS_KEY;
 
-export const getUser = () => {
-  if (typeof localStorage !== "undefined") {
-    const user = localStorage.getItem("user");
-    if (user) {
-      return JSON.parse(user);
-    }
-  }
-
-  return null;
-};
-
 export const setToken = async (token: string) => {
   if (token) {
     const encryptedToken = AES.encrypt(
@@ -102,4 +91,12 @@ export const clearAuth = () => {
   localStorage.removeItem("_rt");
   localStorage.removeItem("token");
   localStorage.removeItem("user");
+};
+
+export const getUserData = () => {
+  const token = getToken();
+  if (token) {
+    return decodeToken(token);
+  }
+  return null;
 };

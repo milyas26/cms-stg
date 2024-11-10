@@ -1,8 +1,3 @@
-import {
-  PERSENTASE_PLATFORM_PRICE,
-  PERSENTASE_SERVICE_FEE,
-} from "@/features/common/domain/enums/common.enum";
-
 export const setLocalStorage = (key: string, value: any) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
@@ -16,25 +11,6 @@ export const formatCurrency = (value: number) => {
 
 export const rupiahToNumber = (value: any) =>
   typeof value === "number" ? value : parseInt(value?.replace(/\./g, ""));
-
-export const getPriceBook = (price: number) => {
-  const pricePlatform =
-    rupiahToNumber(price) * (PERSENTASE_PLATFORM_PRICE / 100);
-  const priceServiceFee =
-    rupiahToNumber(price) * (PERSENTASE_SERVICE_FEE / 100);
-  const priceSale: any =
-    rupiahToNumber(price) +
-    Math.ceil(pricePlatform) +
-    Math.ceil(priceServiceFee);
-
-  const waca_coin = Math.ceil(priceSale / 600);
-  return {
-    sale_price: priceSale,
-    platform_price: pricePlatform,
-    waca_coin,
-    service_fee: priceServiceFee,
-  };
-};
 
 export const getStartEndDate = (startDate: Date, endDate: Date) => {
   const start = new Date(startDate);
@@ -84,4 +60,14 @@ export function formatNumberCounter(num: number) {
     return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   }
   return num.toString();
+}
+
+export function dateTimeFormat(date: string) {
+  const newDate = new Date(date);
+  const day = newDate.getDate();
+  const month = newDate.toLocaleString("default", { month: "short" });
+  const year = newDate.getFullYear();
+  const hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+  return `${day} ${month} ${year}, ${hours}:${minutes}`;
 }

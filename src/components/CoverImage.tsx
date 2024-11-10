@@ -1,4 +1,3 @@
-import { Post } from "@/features/post/domain/entities/Post";
 import { Image } from "@mantine/core";
 
 const CoverImage = ({

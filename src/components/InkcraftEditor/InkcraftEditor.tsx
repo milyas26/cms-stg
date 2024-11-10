@@ -43,7 +43,6 @@ import translations from "ckeditor5/translations/en.js";
 import { LoaderCircle } from "lucide-react";
 import { Group } from "@mantine/core";
 import CustomUploadAdapter from "./plugins/CustomUploadAdapter";
-import { useChapterPostStore } from "@/stores/chapterPostStore";
 
 export default function InkcraftEditor({
   value,
@@ -57,7 +56,6 @@ export default function InkcraftEditor({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
-  const { setWordCount } = useChapterPostStore();
 
   useEffect(() => {
     setIsLayoutReady(true);
@@ -193,7 +191,7 @@ export default function InkcraftEditor({
 
   function wordCountPlugin(editor: Editor) {
     editor.plugins.get("WordCount").on("update", (event: any) => {
-      setWordCount(event.source.words);
+      console.log("words: ", event.source.words);
     });
   }
 

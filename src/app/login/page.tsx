@@ -1,65 +1,98 @@
 "use client";
-
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { Button } from "@mantine/core";
-import React from "react";
-import bg from "../../../public/background/background-motif.svg";
+import {
+  Box,
+  Button,
+  Card,
+  Group,
+  Image,
+  PasswordInput,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { LoaderCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { GoogleColorSvg } from "@/assets/icons/GoogleColor";
-import { useTranslations } from "next-intl";
+import { zodResolver } from "mantine-form-zod-resolver";
+import React from "react";
+import { z } from "zod";
 
 const Login = () => {
-  const { loginGoogle, loading } = useAuth();
-  const router = useRouter();
-  const t = useTranslations("auth");
+  const { loading, handleLogin } = useAuth();
+
+  const schema = z.object({
+    email: z.string().email("Email yang anda masukkan tidak valid"),
+    password: z.string().min(8, "Password minimal 8 karakter"),
+  });
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate: zodResolver(schema),
+  });
+
+  const handleSubmit = async (values: z.infer<typeof schema>) => {
+    handleLogin(values);
+  };
 
   return (
-    <div>
-      <div className="h-screen flex items-center justify-center">
-        <div className="w-[470px] border border-slate-300 space-y-8 pb-10 mx-4 rounded-md">
-          <div
-            className="flex items-center justify-center"
-            style={{
-              backgroundImage: `url(${bg.src})`,
-              backgroundSize: "cover",
-              height: 200,
-            }}
+    <Box className="h-screen flex items-center justify-center">
+      <Card shadow="sm" padding="lg" radius="md" withBorder w={480}>
+        <form onSubmit={form.onSubmit(handleSubmit)} className="space-y-4">
+          <Group align="center" justify="center">
+            <Image
+              src="/logo/logo-wacaku-black.svg"
+              alt="Norway fjords"
+              w={250}
+              className="mb-lg"
+            />
+          </Group>
+          <Box className="text-center">
+            <Text fw={600} className="!text-2xl">
+              Sign In
+            </Text>
+            <Text size="sm" c="dimmed">
+              Login CMS dengan akun Wacaku
+            </Text>
+          </Box>
+
+          <TextInput
+            placeholder="Masukkan email anda"
+            label="Email"
+            size="md"
+            key={form.key("email")}
+            disabled={loading}
+            {...form.getInputProps("email")}
+          />
+
+          <PasswordInput
+            label="Password"
+            placeholder="Masukkan password anda"
+            size="md"
+            key={form.key("password")}
+            disabled={loading}
+            {...form.getInputProps("password")}
+          />
+
+          <Button
+            color="blue"
+            fullWidth
+            mt="md"
+            radius="sm"
+            size="md"
+            type="submit"
+            disabled={loading}
           >
-            <img src="/logo/pena-black.svg" alt="inkcraft" width={160} />
-          </div>
-          <div className="flex justify-center">
-            <div className="w-80 text-center">{t("login.description-1")}</div>
-          </div>
-          <div className="flex justify-center">
-            <Button
-              className="flex items-center gap-2 border-2 border-[#DDDDDD] text-black text-md"
-              size="lg"
-              color="#fff"
-              variant="default"
-              disabled={loading}
-              onClick={loginGoogle}
-            >
-              <GoogleColorSvg className="h-8 w-8" />
-              <div className="font-semibold pl-2">
-                {t("login.login-with-google")}
-              </div>
-              {loading && (
-                <LoaderCircle className="animate-spin font-semibold text-lg ml-2" />
-              )}
-            </Button>
-          </div>
-          <div className="flex justify-center">
-            <div className="w-80 text-center text-sm">
-              {t("login.description-2")}
-            </div>
-          </div>
-          <div className="flex items-center justify-center">
-            <button onClick={() => router.push("/")}>{t("login.back")}</button>
-          </div>
-        </div>
-      </div>
-    </div>
+            Sign In
+            {loading && (
+              <LoaderCircle className="animate-spin font-semibold text-lg ml-2" />
+            )}
+          </Button>
+        </form>
+      </Card>
+    </Box>
   );
 };
 
