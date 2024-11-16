@@ -24,4 +24,16 @@ export class MonetisakuApiRepository implements MonetisakuRepository {
     );
     return response.data.data;
   }
+
+  async decideMonetisakuEnrollment(
+    id: string,
+    status: string,
+    reason: string
+  ): Promise<Enrollment> {
+    const response = await msapGuardedAccess.patch(`monetisaku/${id}`, {
+      status,
+      reason,
+    });
+    return response.data.data;
+  }
 }

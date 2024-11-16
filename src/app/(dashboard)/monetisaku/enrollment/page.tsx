@@ -2,6 +2,7 @@
 import InkcraftTable from "@/components/InkcraftTable";
 import { Banner } from "@/features/banner/domain/entities/Banner";
 import {
+  getColorMonetisakuEnrollment,
   ProccessStatusEnum,
   ProccessStatusEnumLabel,
 } from "@/features/monetisaku/data/enums/monetisaku.enums";
@@ -20,11 +21,18 @@ import {
 } from "@mantine/core";
 import { ChevronDown } from "lucide-react";
 import React from "react";
+import ModalEnrollment from "../component/ModalEnrollment";
+import { useDisclosure } from "@mantine/hooks";
 
 const EnrollmentPage = () => {
   const { enrollments, enrollmentListPagination, setEnrollmentListPagination } =
     useMonetisakuStore();
   const { getAllEnrollment, loading, initialFetch } = useEnrollment();
+  const [isOpenModal, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+  const [selectedEnrollment, setSelectedEnrollment] =
+    React.useState<Enrollment>({} as Enrollment);
+
   const columns = [
     {
       key: "user",
@@ -62,23 +70,10 @@ const EnrollmentPage = () => {
       title: "Status",
       width: "auto",
       render: (_: number, data: Enrollment) => {
-        const getColor = (status: string) => {
-          switch (status) {
-            case ProccessStatusEnum.APPROVED:
-              return "green";
-            case ProccessStatusEnum.APPROVED:
-              return "orange";
-            case ProccessStatusEnum.REJECTED:
-              return "gray";
-            default:
-              return "yellow";
-          }
-        };
-
         return (
           <Badge
             variant="light"
-            color={getColor(data.status)}
+            color={getColorMonetisakuEnrollment(data.status)}
             size="md"
             radius="sm"
           >
@@ -104,9 +99,16 @@ const EnrollmentPage = () => {
       key: "action",
       title: "Action",
       width: "8%",
-      render: (_: number, __: Banner) => {
+      render: (_: number, enrollment: Enrollment) => {
         return (
-          <ActionIcon variant="light" aria-label="Settings">
+          <ActionIcon
+            variant="light"
+            aria-label="Settings"
+            onClick={() => {
+              setSelectedEnrollment(enrollment);
+              openModal();
+            }}
+          >
             <ChevronDown size={20} />
           </ActionIcon>
         );
@@ -149,6 +151,13 @@ const EnrollmentPage = () => {
           mt="sm"
         />
       </Group>
+
+      <ModalEnrollment
+        closeModal={closeModal}
+        isOpenModal={isOpenModal}
+        loading={loading}
+        enrollment={selectedEnrollment}
+      />
     </Box>
   );
 };

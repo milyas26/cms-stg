@@ -12,7 +12,7 @@ import {
   rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { getToken, getUserData, isUserLoggedIn } from "@/utils/authUtils";
+import { clearAuth, getUserData, isUserLoggedIn } from "@/utils/authUtils";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Notifications } from "@mantine/notifications";
@@ -92,18 +92,14 @@ export default function RootLayout({
                   </div>
                 </Menu.Label>
                 <Menu.Item
-                  disabled
-                  leftSection={
-                    <Settings style={{ width: rem(14), height: rem(14) }} />
-                  }
-                >
-                  Settings
-                </Menu.Item>
-                <Menu.Item
                   color="red"
                   leftSection={
                     <LogOut style={{ width: rem(14), height: rem(14) }} />
                   }
+                  onClick={() => {
+                    clearAuth();
+                    router.push("/login");
+                  }}
                 >
                   Logout
                 </Menu.Item>

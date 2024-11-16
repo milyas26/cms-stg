@@ -1,13 +1,12 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { ActionIcon, Avatar, Box, Image, Text } from "@mantine/core";
-import { Coins, IdCard, Layers, LogOut, X } from "lucide-react";
+import { Avatar, Box, Image, Text } from "@mantine/core";
+import { Coins, IdCard, Layers } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { getUserData } from "@/utils/authUtils";
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const { logout } = useAuth();
   const router = useRouter();
   const user = getUserData();
   const menus = [
@@ -103,7 +102,9 @@ const Sidebar = () => {
               <Box
                 key={key}
                 className={`mb-2 text-sm px-4 py-3 rounded-md hover:cursor-pointer hover:bg-white hover:bg-opacity-10 ${
-                  pathname === child.href ? "bg-white/10" : ""
+                  pathname === child.href
+                    ? "bg-white/10 text-white"
+                    : "text-slate-300"
                 }`}
                 onClick={() => router.push(child.href)}
               >

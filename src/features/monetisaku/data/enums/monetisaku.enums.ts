@@ -28,3 +28,22 @@ export const WithdrawalRequestStatusEnumLabel: Record<
   [WithdrawalRequestStatusEnum.DONE]: "Selesai",
   [WithdrawalRequestStatusEnum.REJECTED]: "Ditolak",
 };
+
+export const getColorMonetisakuEnrollment = (status: string) => {
+  switch (status) {
+    case ProccessStatusEnum.APPROVED:
+      return "green";
+    case ProccessStatusEnum.PROCESSED:
+      return "orange";
+    case ProccessStatusEnum.REJECTED:
+      return "gray";
+    default:
+      return "yellow";
+  }
+};
+
+export enum IEnrollmentActionType {
+  INITIAL = "",
+  REJECT = "REJECTED",
+  APPROVE = "APPROVED",
+}

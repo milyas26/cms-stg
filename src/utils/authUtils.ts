@@ -88,9 +88,6 @@ export const getAccessToken = (): string | null => {
 
 export const clearAuth = () => {
   localStorage.removeItem("_at");
-  localStorage.removeItem("_rt");
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
 };
 
 export const getUserData = () => {

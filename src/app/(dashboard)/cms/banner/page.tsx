@@ -3,12 +3,18 @@ import InkcraftTable from "@/components/InkcraftTable";
 import { Banner } from "@/features/banner/domain/entities/Banner";
 import useBanner from "@/features/banner/hooks/useBanner";
 import { useBannerStore } from "@/stores/bannerStore";
-import { Box, Button, Group, Image, Text, Title } from "@mantine/core";
+import { Box, Button, Group, Image, Modal, Text, Title } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Plus } from "lucide-react";
 import React from "react";
+import ModalBanner from "./component/ModalBanner";
 
 const BannerPage = () => {
   const { banners } = useBannerStore();
   const { getAllBanners, loading } = useBanner();
+  const [isOpenModal, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+
   const columns = [
     {
       key: "position",
@@ -73,11 +79,20 @@ const BannerPage = () => {
           radius="sm"
           loading={loading}
           disabled={loading}
+          leftSection={<Plus size={16} />}
+          onClick={openModal}
         >
           Create Banner
         </Button>
       </Group>
       <InkcraftTable columns={columns} dataSource={banners} loading={loading} />
+
+      <ModalBanner
+        isOpenModal={isOpenModal}
+        closeModal={closeModal}
+        loading={loading}
+        length={banners.length}
+      />
     </Box>
   );
 };

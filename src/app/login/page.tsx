@@ -62,6 +62,7 @@ const Login = () => {
             placeholder="Masukkan email anda"
             label="Email"
             size="md"
+            withAsterisk
             key={form.key("email")}
             disabled={loading}
             {...form.getInputProps("email")}
@@ -71,13 +72,14 @@ const Login = () => {
             label="Password"
             placeholder="Masukkan password anda"
             size="md"
+            withAsterisk
             key={form.key("password")}
             disabled={loading}
             {...form.getInputProps("password")}
           />
 
           <Button
-            color="blue"
+            color="indigo"
             fullWidth
             mt="md"
             radius="sm"

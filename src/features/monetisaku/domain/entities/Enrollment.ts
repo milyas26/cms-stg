@@ -17,6 +17,12 @@ export class Enrollment {
       createdAt: string;
       updatedAt: string;
       coverImage: string;
+      coverCustom?: {
+        backgroundColor: string;
+        backgroundUrl: string;
+        color: string;
+        title: string;
+      };
       category: string;
     },
     public status: string,

@@ -32,18 +32,18 @@ const CoverImage = ({
           radius="sm"
           src={coverImage}
           alt={title}
-          w={56}
+          w={180}
           fallbackSrc="https://placehold.co/140x200?text=No+Image"
         />
       ) : (
         <div className="relative aspect-7/10">
           {coverCustom && (
             <div
-              className="w-14 px-2 bg-cover bg-center rounded-md"
+              className="w-[180px] px-2 bg-cover bg-center rounded-md"
               style={coverStyle}
             >
-              <div className="w-14 aspect-[7/10] flex items-center">
-                <p className="w-10 text-center leading-snug text-[10px]">
+              <div className="w-[180px] aspect-[7/10] flex items-center">
+                <p className="w-[200px] text-center leading-snug text-[14px]">
                   {title || ""}
                 </p>
               </div>
