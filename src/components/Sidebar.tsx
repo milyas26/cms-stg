@@ -72,7 +72,7 @@ const Sidebar = () => {
 
   return (
     <Box className="overflow-y-auto text-white mt-2 relative h-screen space-y-4 px-4">
-      <Box className="flex justify-between pt-2 items-center">
+      <Box className="flex justify-between pt-4 items-center">
         <Image
           src="/logo/logo-wacaku-red.svg"
           alt="Norway fjords"

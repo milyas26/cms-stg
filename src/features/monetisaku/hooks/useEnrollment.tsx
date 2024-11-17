@@ -56,6 +56,11 @@ const useEnrollment = () => {
         handleCloseModal();
       }
     } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: "Failed to update enrollment",
+        color: "red",
+      });
       console.error(error);
     } finally {
       setLoading(false);

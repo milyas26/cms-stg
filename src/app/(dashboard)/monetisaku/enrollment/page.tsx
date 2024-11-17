@@ -1,8 +1,7 @@
 "use client";
 import InkcraftTable from "@/components/InkcraftTable";
-import { Banner } from "@/features/banner/domain/entities/Banner";
 import {
-  getColorMonetisakuEnrollment,
+  getColorMonetisaku,
   ProccessStatusEnum,
   ProccessStatusEnumLabel,
 } from "@/features/monetisaku/data/enums/monetisaku.enums";
@@ -73,7 +72,7 @@ const EnrollmentPage = () => {
         return (
           <Badge
             variant="light"
-            color={getColorMonetisakuEnrollment(data.status)}
+            color={getColorMonetisaku(data.status)}
             size="md"
             radius="sm"
           >

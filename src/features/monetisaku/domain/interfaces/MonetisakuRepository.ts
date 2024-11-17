@@ -1,5 +1,6 @@
 import { Enrollment } from "../entities/Enrollment";
 import { EnrollmentListResponse } from "../entities/EnrollmentListResponse";
+import { Withdrawal } from "../entities/Withdrawal";
 import { WithdrawalListResponse } from "../entities/WithdrawalListResponse";
 
 export interface MonetisakuRepository {
@@ -10,4 +11,9 @@ export interface MonetisakuRepository {
     status: string,
     reason: string
   ): Promise<Enrollment>;
+  decideWithdrawal(
+    id: string,
+    status: string,
+    reason: string
+  ): Promise<Withdrawal>;
 }

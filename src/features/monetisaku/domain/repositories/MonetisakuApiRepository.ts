@@ -3,6 +3,7 @@ import { Enrollment } from "../entities/Enrollment";
 import { MonetisakuRepository } from "../interfaces/MonetisakuRepository";
 import { EnrollmentListResponse } from "../entities/EnrollmentListResponse";
 import { WithdrawalListResponse } from "../entities/WithdrawalListResponse";
+import { Withdrawal } from "../entities/Withdrawal";
 
 export class MonetisakuApiRepository implements MonetisakuRepository {
   async getEnrollment(
@@ -35,5 +36,20 @@ export class MonetisakuApiRepository implements MonetisakuRepository {
       reason,
     });
     return response.data.data;
+  }
+
+  async decideWithdrawal(
+    id: string,
+    status: string,
+    reason: string
+  ): Promise<Withdrawal> {
+    const response = await msapGuardedAccess.patch(
+      `monetisaku/withdrawal/${id}`,
+      {
+        status,
+        reason,
+      }
+    );
+    return response.data;
   }
 }

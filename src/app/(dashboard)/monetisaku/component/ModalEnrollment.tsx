@@ -1,6 +1,6 @@
 import CoverImage from "@/components/CoverImage";
 import {
-  getColorMonetisakuEnrollment,
+  getColorMonetisaku,
   IEnrollmentActionType,
   ProccessStatusEnum,
   ProccessStatusEnumLabel,
@@ -124,7 +124,7 @@ const ModalEnrollment = ({
                   </Text>
                   <Badge
                     variant="light"
-                    color={getColorMonetisakuEnrollment(enrollment.status)}
+                    color={getColorMonetisaku(enrollment.status)}
                     size="md"
                     radius="sm"
                   >

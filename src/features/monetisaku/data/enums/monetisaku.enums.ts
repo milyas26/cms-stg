@@ -16,6 +16,7 @@ export enum WithdrawalRequestStatusEnum {
   PENDING = "PENDING",
   PROCESSED = "PROCESSED",
   DONE = "DONE",
+  APPROVED = "APPROVED",
   REJECTED = "REJECTED",
 }
 
@@ -27,11 +28,23 @@ export const WithdrawalRequestStatusEnumLabel: Record<
   [WithdrawalRequestStatusEnum.PROCESSED]: "Diproses",
   [WithdrawalRequestStatusEnum.DONE]: "Selesai",
   [WithdrawalRequestStatusEnum.REJECTED]: "Ditolak",
+  [WithdrawalRequestStatusEnum.APPROVED]: "Disetujui",
 };
 
-export const getColorMonetisakuEnrollment = (status: string) => {
+export const WithdrawalConfirmLabel: Record<
+  WithdrawalRequestStatusEnum,
+  string
+> = {
+  [WithdrawalRequestStatusEnum.PROCESSED]: "Process",
+  [WithdrawalRequestStatusEnum.DONE]: "Approve",
+  [WithdrawalRequestStatusEnum.REJECTED]: "Reject",
+  [WithdrawalRequestStatusEnum.PENDING]: "Pending",
+  [WithdrawalRequestStatusEnum.APPROVED]: "Approved",
+};
+
+export const getColorMonetisaku = (status: string) => {
   switch (status) {
-    case ProccessStatusEnum.APPROVED:
+    case ProccessStatusEnum.APPROVED || WithdrawalRequestStatusEnum.DONE:
       return "green";
     case ProccessStatusEnum.PROCESSED:
       return "orange";
@@ -39,6 +52,19 @@ export const getColorMonetisakuEnrollment = (status: string) => {
       return "gray";
     default:
       return "yellow";
+  }
+};
+
+export const getColorMonetisakuButton = (status: string) => {
+  switch (status) {
+    case WithdrawalRequestStatusEnum.APPROVED:
+      return "indigo";
+    case ProccessStatusEnum.PROCESSED:
+      return "orange";
+    case ProccessStatusEnum.REJECTED:
+      return "red";
+    default:
+      return "gray";
   }
 };
 

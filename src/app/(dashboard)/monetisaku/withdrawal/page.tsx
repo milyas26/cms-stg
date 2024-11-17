@@ -1,7 +1,9 @@
 "use client";
 import InkcraftTable from "@/components/InkcraftTable";
-import { Banner } from "@/features/banner/domain/entities/Banner";
 import {
+  getColorMonetisaku,
+  getColorMonetisakuButton,
+  WithdrawalConfirmLabel,
   WithdrawalRequestStatusEnum,
   WithdrawalRequestStatusEnumLabel,
 } from "@/features/monetisaku/data/enums/monetisaku.enums";
@@ -13,19 +15,32 @@ import {
   ActionIcon,
   Badge,
   Box,
+  Button,
   Group,
+  Menu,
+  Modal,
   NumberFormatter,
   Pagination,
   Text,
   Title,
 } from "@mantine/core";
-import { ChevronDown } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 import React from "react";
+import { useDisclosure } from "@mantine/hooks";
 
 const WithdrawalPage = () => {
   const { withdrawals, withdrawalListPagination, setWithdrawalListPagination } =
     useMonetisakuStore();
-  const { getAllWithdrawal, loading, initialFetch } = useWithdrawal();
+  const [isOpenModal, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+  const [confirmType, setConfirmType] =
+    React.useState<WithdrawalRequestStatusEnum>(
+      WithdrawalRequestStatusEnum.PENDING
+    );
+  const [selectedWithdrawal, setSelectedWithdrawal] =
+    React.useState<Withdrawal>({} as Withdrawal);
+  const { getAllWithdrawal, loading, initialFetch, handleDecideWithdrawal } =
+    useWithdrawal();
   const columns = [
     {
       key: "fullname",
@@ -54,6 +69,22 @@ const WithdrawalPage = () => {
       },
     },
     {
+      key: "destinationBank",
+      title: "Bank Name",
+      width: "auto",
+      render: (_: number, withdrawal: Withdrawal) => {
+        return <Text size="sm">{withdrawal.destinationBank}</Text>;
+      },
+    },
+    {
+      key: "destinationAccountNumber",
+      title: "Bank No",
+      width: "auto",
+      render: (_: number, withdrawal: Withdrawal) => {
+        return <Text size="sm">{withdrawal.destinationAccountNumber}</Text>;
+      },
+    },
+    {
       key: "createdAt",
       title: "Applied At",
       width: "auto",
@@ -66,23 +97,10 @@ const WithdrawalPage = () => {
       title: "Status",
       width: "auto",
       render: (_: number, data: Withdrawal) => {
-        const getColor = (status: string) => {
-          switch (status) {
-            case WithdrawalRequestStatusEnum.DONE:
-              return "green";
-            case WithdrawalRequestStatusEnum.PROCESSED:
-              return "orange";
-            case WithdrawalRequestStatusEnum.REJECTED:
-              return "gray";
-            default:
-              return "yellow";
-          }
-        };
-
         return (
           <Badge
             variant="light"
-            color={getColor(data.status)}
+            color={getColorMonetisaku(data.status)}
             size="md"
             radius="sm"
           >
@@ -100,11 +118,57 @@ const WithdrawalPage = () => {
       key: "action",
       title: "Action",
       width: "8%",
-      render: (_: number, __: Banner) => {
+      render: (_: number, withdrawal: Withdrawal) => {
+        const isUnProcessed =
+          withdrawal.status === WithdrawalRequestStatusEnum.PROCESSED ||
+          withdrawal.status === WithdrawalRequestStatusEnum.PENDING;
+
+        const handleClickMenu = (status: WithdrawalRequestStatusEnum) => {
+          openModal();
+          setConfirmType(status);
+          setSelectedWithdrawal(withdrawal);
+        };
         return (
-          <ActionIcon variant="light" aria-label="Settings">
-            <ChevronDown size={20} />
-          </ActionIcon>
+          <Menu shadow="md" width={200} position="bottom-end">
+            <Menu.Target>
+              <ActionIcon variant="light" aria-label="More">
+                <Ellipsis />
+              </ActionIcon>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item
+                color="red"
+                disabled={!isUnProcessed || loading}
+                onClick={() =>
+                  handleClickMenu(WithdrawalRequestStatusEnum.REJECTED)
+                }
+              >
+                Reject
+              </Menu.Item>
+              <Menu.Item
+                color="orange"
+                disabled={
+                  withdrawal.status !== WithdrawalRequestStatusEnum.PENDING ||
+                  loading
+                }
+                onClick={() =>
+                  handleClickMenu(WithdrawalRequestStatusEnum.PROCESSED)
+                }
+              >
+                Process
+              </Menu.Item>
+              <Menu.Item
+                color="indigo"
+                disabled={!isUnProcessed || loading}
+                onClick={() =>
+                  handleClickMenu(WithdrawalRequestStatusEnum.APPROVED)
+                }
+              >
+                Approve
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         );
       },
     },
@@ -145,6 +209,41 @@ const WithdrawalPage = () => {
           mt="sm"
         />
       </Group>
+
+      <Modal
+        opened={isOpenModal}
+        onClose={closeModal}
+        withCloseButton={false}
+        centered
+        size="sm"
+      >
+        <Box className="space-y-4">
+          <Text size="lg" fw={500} className="text-center">
+            Are you sure to{" "}
+            {WithdrawalConfirmLabel[confirmType].toLocaleLowerCase()} this
+            withdrawal?
+          </Text>
+          <Button
+            variant="filled"
+            color={getColorMonetisakuButton(confirmType)}
+            radius="xl"
+            fullWidth
+            loading={loading}
+            disabled={loading}
+            type="button"
+            onClick={() =>
+              handleDecideWithdrawal(
+                selectedWithdrawal._id,
+                confirmType,
+                "",
+                closeModal
+              )
+            }
+          >
+            {WithdrawalConfirmLabel[confirmType]}
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 };
