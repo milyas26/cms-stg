@@ -61,7 +61,7 @@ const UserManagementPage = () => {
             color={data.status === "ACTIVE" ? "blue" : "gray"}
             variant="light"
             radius="sm"
-            size="lg"
+            size="md"
             className="mr-2"
           >
             {data.status}
