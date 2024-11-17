@@ -127,7 +127,6 @@ const ModalBanner = ({
             placeholder="Masukkan Posisi Banner"
             label="Position"
             withAsterisk
-            size="md"
             key={form.key("position")}
             disabled={loading}
             {...form.getInputProps("position")}
@@ -138,12 +137,10 @@ const ModalBanner = ({
             withAsterisk
             data={bannerTypes}
             disabled={loading}
-            size="md"
             key={form.key("typeTarget")}
             {...form.getInputProps("typeTarget")}
           />
           <Autocomplete
-            size="md"
             label="Your favorite library"
             placeholder="Pick value or enter anything"
             data={["React", "Angular", "Vue", "Svelte"]}
