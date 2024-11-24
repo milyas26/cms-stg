@@ -28,7 +28,11 @@ const ModalAdminUser = ({
   closeModal,
   adminUser,
 }: IModalAdminUserProps) => {
-  const { loading: createLoading, createUserManagement } = useUserManagement();
+  const {
+    loading: createLoading,
+    createUserManagement,
+    updateUserManagement,
+  } = useUserManagement();
   const { loading: loadingRoles, handleGetRoles, roles } = useRoles();
   const [status, setStatus] = React.useState<"ACTIVE" | "INACTIVE">("INACTIVE");
   const schema = z.object({
@@ -60,6 +64,14 @@ const ModalAdminUser = ({
         roles: values.roles,
       };
       createUserManagement(payload, closeModal);
+    } else {
+      const payload = {
+        email: values.email,
+        fullName: values.fullname,
+        roles: values.roles,
+        status,
+      };
+      updateUserManagement(payload, closeModal);
     }
   };
 
@@ -79,7 +91,7 @@ const ModalAdminUser = ({
           roles: adminUser.roles as any,
         });
 
-        setStatus("ACTIVE");
+        setStatus(adminUser.status as "ACTIVE" | "INACTIVE");
       }
     }
   }, [isOpenModal]);
@@ -167,7 +179,7 @@ const ModalAdminUser = ({
               disabled={createLoading || loadingRoles}
               type="submit"
             >
-              Create
+              {adminUser ? "Update" : "Create"}
             </Button>
           </Group>
         </Box>

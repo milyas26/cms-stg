@@ -20,4 +20,16 @@ export class UserManagementApiRepository implements UserManagementRepository {
     const response = await msapGuardedAccess.get("/admin/user-roles");
     return response.data.data;
   }
+
+  async deleteUserManagement(id: string): Promise<{ id: string }> {
+    await msapGuardedAccess.delete(`/admin/user/${id}`);
+    return { id };
+  }
+
+  async updateUserManagement(
+    payload: UpdateAdminUserPayload
+  ): Promise<UpdateAdminUserPayload> {
+    await msapGuardedAccess.patch(`/admin/user`, payload);
+    return payload;
+  }
 }

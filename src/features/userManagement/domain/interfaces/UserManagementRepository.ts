@@ -7,4 +7,8 @@ export interface UserManagementRepository {
     payload: CreateAdminUserPayload
   ): Promise<CreateAdminUserPayload>;
   getAllRoles(): Promise<Roles[]>;
+  deleteUserManagement(id: string): Promise<{ id: string }>;
+  updateUserManagement(
+    payload: UpdateAdminUserPayload
+  ): Promise<UpdateAdminUserPayload>;
 }

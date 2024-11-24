@@ -8,22 +8,28 @@ import {
   Box,
   Button,
   Group,
+  Modal,
   Text,
   Title,
 } from "@mantine/core";
-import { ChevronDown, Plus } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import React from "react";
 import ModalAdminUser from "../component/ModalAdminUser";
 import { useDisclosure } from "@mantine/hooks";
 import { useUserManagementStore } from "@/stores/userManagementStore";
 
 const UserManagementPage = () => {
-  const { loading, getAllAdminUser } = useUserManagement();
+  const { loading, getAllAdminUser, handleDeleteAdminUser } =
+    useUserManagement();
   const { userAdmin } = useUserManagementStore();
   const [isOpenModal, { open: openModal, close: closeModal }] =
     useDisclosure(false);
   const [selectedAdminUser, setSelectedAdminUser] =
     React.useState<AdminUser | null>(null);
+  const [
+    isOpenConfirmDelete,
+    { open: openConfirmDelete, close: closeConfirmDelete },
+  ] = useDisclosure(false);
 
   const columns = [
     {
@@ -84,16 +90,32 @@ const UserManagementPage = () => {
       width: "8%",
       render: (_: number, data: AdminUser) => {
         return (
-          <ActionIcon
-            variant="light"
-            aria-label="Settings"
-            onClick={() => {
-              setSelectedAdminUser(data);
-              openModal();
-            }}
-          >
-            <ChevronDown size={20} />
-          </ActionIcon>
+          <Group gap="xs">
+            <ActionIcon
+              variant="light"
+              color="blue"
+              radius="sm"
+              size="md"
+              onClick={() => {
+                setSelectedAdminUser(data);
+                openModal();
+              }}
+            >
+              <Pencil size={18} />
+            </ActionIcon>
+            <ActionIcon
+              variant="light"
+              color="red"
+              radius="sm"
+              size="md"
+              onClick={() => {
+                setSelectedAdminUser(data);
+                openConfirmDelete();
+              }}
+            >
+              <Trash size={18} />
+            </ActionIcon>
+          </Group>
         );
       },
     },
@@ -130,6 +152,45 @@ const UserManagementPage = () => {
         closeModal={closeModal}
         adminUser={selectedAdminUser}
       />
+
+      <Modal
+        opened={isOpenConfirmDelete}
+        onClose={closeConfirmDelete}
+        withCloseButton={false}
+        centered
+      >
+        <Box className="space-y-4 text-center">
+          <Text fw="bold" size="md">
+            Apakah anda yakin ingin menghapus user ini?
+          </Text>
+          <Group align="center" justify="space-between" grow wrap="nowrap">
+            <Button
+              variant="filled"
+              color="rgb(11, 25, 44)"
+              radius="sm"
+              loading={loading}
+              disabled={loading}
+              fullWidth
+              onClick={closeConfirmDelete}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="filled"
+              color="red"
+              radius="sm"
+              loading={loading}
+              disabled={loading}
+              fullWidth
+              onClick={() =>
+                handleDeleteAdminUser(selectedAdminUser!, closeConfirmDelete)
+              }
+            >
+              Hapus
+            </Button>
+          </Group>
+        </Box>
+      </Modal>
     </Box>
   );
 };
