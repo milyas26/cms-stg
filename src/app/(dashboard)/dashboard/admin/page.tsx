@@ -13,9 +13,18 @@ import {
 } from "@mantine/core";
 import { ChevronDown, Plus } from "lucide-react";
 import React from "react";
+import ModalAdminUser from "../component/ModalAdminUser";
+import { useDisclosure } from "@mantine/hooks";
+import { useUserManagementStore } from "@/stores/userManagementStore";
 
 const UserManagementPage = () => {
-  const { loading, getAllAdminUser, adminUsers } = useUserManagement();
+  const { loading, getAllAdminUser } = useUserManagement();
+  const { userAdmin } = useUserManagementStore();
+  const [isOpenModal, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+  const [selectedAdminUser, setSelectedAdminUser] =
+    React.useState<AdminUser | null>(null);
+
   const columns = [
     {
       key: "fullname",
@@ -78,7 +87,10 @@ const UserManagementPage = () => {
           <ActionIcon
             variant="light"
             aria-label="Settings"
-            onClick={() => null}
+            onClick={() => {
+              setSelectedAdminUser(data);
+              openModal();
+            }}
           >
             <ChevronDown size={20} />
           </ActionIcon>
@@ -102,14 +114,21 @@ const UserManagementPage = () => {
           loading={loading}
           disabled={loading}
           leftSection={<Plus size={16} />}
+          onClick={openModal}
         >
           Add User
         </Button>
       </Group>
       <InkcraftTable
         columns={columns}
-        dataSource={adminUsers}
+        dataSource={userAdmin}
         loading={loading}
+      />
+
+      <ModalAdminUser
+        isOpenModal={isOpenModal}
+        closeModal={closeModal}
+        adminUser={selectedAdminUser}
       />
     </Box>
   );

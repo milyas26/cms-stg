@@ -3,17 +3,33 @@ import InkcraftTable from "@/components/InkcraftTable";
 import { Banner } from "@/features/banner/domain/entities/Banner";
 import useBanner from "@/features/banner/hooks/useBanner";
 import { useBannerStore } from "@/stores/bannerStore";
-import { Box, Button, Group, Image, Modal, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Group,
+  Image,
+  Modal,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import React from "react";
 import ModalBanner from "./component/ModalBanner";
 
 const BannerPage = () => {
   const { banners } = useBannerStore();
-  const { getAllBanners, loading } = useBanner();
+  const { getAllBanners, loading, handleDeleteBanner } = useBanner();
   const [isOpenModal, { open: openModal, close: closeModal }] =
     useDisclosure(false);
+  const [selectedBanner, setSelectedBanner] = React.useState<Banner | null>(
+    null
+  );
+  const [
+    isOpenConfirmDelete,
+    { open: openConfirmDelete, close: closeConfirmDelete },
+  ] = useDisclosure(false);
 
   const columns = [
     {
@@ -51,15 +67,32 @@ const BannerPage = () => {
       width: "8%",
       render: (_: number, data: Banner) => {
         return (
-          <Button
-            variant="light"
-            color="blue"
-            radius="sm"
-            size="xs"
-            onClick={() => console.log(data)}
-          >
-            Edit
-          </Button>
+          <Group gap="xs">
+            <ActionIcon
+              variant="light"
+              color="blue"
+              radius="sm"
+              size="md"
+              onClick={() => {
+                setSelectedBanner(data);
+                openModal();
+              }}
+            >
+              <Pencil size={18} />
+            </ActionIcon>
+            <ActionIcon
+              variant="light"
+              color="red"
+              radius="sm"
+              size="md"
+              onClick={() => {
+                setSelectedBanner(data);
+                openConfirmDelete();
+              }}
+            >
+              <Trash size={18} />
+            </ActionIcon>
+          </Group>
         );
       },
     },
@@ -90,9 +123,49 @@ const BannerPage = () => {
       <ModalBanner
         isOpenModal={isOpenModal}
         closeModal={closeModal}
-        loading={loading}
         length={banners.length}
+        selectedBanner={selectedBanner}
+        setSelectedBanner={setSelectedBanner}
       />
+
+      <Modal
+        opened={isOpenConfirmDelete}
+        onClose={closeConfirmDelete}
+        withCloseButton={false}
+        centered
+      >
+        <Box className="space-y-4 text-center">
+          <Text fw="bold" size="md">
+            Apakah anda yakin ingin menghapus banner ini?
+          </Text>
+          <Group align="center" justify="space-between" grow wrap="nowrap">
+            <Button
+              variant="filled"
+              color="rgb(11, 25, 44)"
+              radius="sm"
+              loading={loading}
+              disabled={loading}
+              fullWidth
+              onClick={closeConfirmDelete}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="filled"
+              color="red"
+              radius="sm"
+              loading={loading}
+              disabled={loading}
+              fullWidth
+              onClick={() =>
+                handleDeleteBanner(selectedBanner!, closeConfirmDelete)
+              }
+            >
+              Hapus
+            </Button>
+          </Group>
+        </Box>
+      </Modal>
     </Box>
   );
 };
