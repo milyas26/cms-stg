@@ -23,7 +23,7 @@ const AdjustmentPage = () => {
       title: "User",
       render: (_: number, data: TrxAdjustment) => {
         return (
-          <Text fw={600} size="sm">
+          <Text fw={600} size="sm" py="sm">
             {data.user?.fullName}
           </Text>
         );

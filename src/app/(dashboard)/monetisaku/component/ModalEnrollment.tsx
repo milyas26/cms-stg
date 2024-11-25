@@ -90,7 +90,7 @@ const ModalEnrollment = ({
   return (
     <Modal
       opened={isOpenModal}
-      onClose={() => null}
+      onClose={handleCloseModal}
       withCloseButton={false}
       centered
       size="55rem"

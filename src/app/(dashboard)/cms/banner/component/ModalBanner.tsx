@@ -221,7 +221,7 @@ const ModalBanner = ({
             src={urlBanner}
             alt="banner"
             w="100%"
-            fallbackSrc="https://placehold.co/300x120?text=Select+Image"
+            fallbackSrc="https://placehold.co/300x120?text=Select+Banner+Image"
           />
           <input
             type="file"
